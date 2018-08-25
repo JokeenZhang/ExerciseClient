@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });*/
 
+        //探究RxJava这几个操作符发射事件的顺序
         Observable.fromIterable(mStudents)
                 .subscribe(new Consumer<Student>() {
                     @Override
