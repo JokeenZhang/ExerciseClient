@@ -1,9 +1,12 @@
 package com.zzq.gankclient;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
+import android.arch.paging.PagedList;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +15,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.zzq.gankclient.data.FuliDataBean;
 import com.zzq.gankclient.net.GankManager;
+import com.zzq.gankclient.repository.GankRepository;
 import com.zzq.gankclient.view.adapter.GankAdapter;
+import com.zzq.gankclient.viewmodels.GankDataViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int PRELOAD_SIZE = 6;
     private ArrayList<FuliDataBean.ResultsBean> mResultsBeans;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
             }, 45);
         }
 
-//        mRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -57,34 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         //RecyclerView滑动过程中不断请求layout的Request，不断调整item见的间隙，并且是在item尺寸显示前预处理，因此解决RecyclerView滑动到顶部时仍会出现移动问题
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-        mRecyclerView.setPadding(0, 0, 0, 0);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                layoutManager.invalidateSpanAssignments();
-
-                boolean isBottom =
-                        layoutManager.findLastCompletelyVisibleItemPositions(new int[2])[1] >=
-                                mAdapter.getItemCount() - PRELOAD_SIZE;
-                if (isBottom) {
-                    if (!mIsFirstTimeTouchBottom) {
-                        pageIndex += 1;
-                        loadData();
-                    } else {
-                        mIsFirstTimeTouchBottom = false;
-                    }
-                }
-            }
-        });
-
+        //layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         loadData();
-
     }
 
     private void loadData() {
-        GankManager.getGankService().getFuliData(10, pageIndex)
+        /*GankManager.getGankService().getFuliData(20, pageIndex)
                 .subscribeOn(Schedulers.io())
                 .flatMap(new Function<FuliDataBean, ObservableSource<FuliDataBean.ResultsBean>>() {
                     @Override
@@ -100,17 +81,17 @@ public class MainActivity extends AppCompatActivity {
                         mResultsBeans.add(resultsBean);
                         mAdapter.setData(mResultsBeans);
                     }
-                });
+                });*/
 
-        List<String> stringList = new ArrayList<>();
+        GankDataViewModel gankFuliDataViewModel = GankRepository.getGankFuliDataViewModel(this);
+        gankFuliDataViewModel.getGankFuliLiveData().observe(this, new Observer<PagedList<FuliDataBean.ResultsBean>>() {
+            @Override
+            public void onChanged(@Nullable PagedList<FuliDataBean.ResultsBean> resultsBeans) {
+                mAdapter.submit
+            }
+        });
+
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-
-    }
-
-//    private void save()
 }

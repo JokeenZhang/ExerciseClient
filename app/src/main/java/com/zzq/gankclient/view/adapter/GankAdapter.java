@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.zzq.gankclient.R;
 import com.zzq.gankclient.data.FuliDataBean;
+import com.zzq.gankclient.view.widget.RatioImageView;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class GankAdapter extends RecyclerView.Adapter<GankAdapter.GankViewHolder
 
     @Override
     public GankViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new GankViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_gank,parent,false));
+        return new GankViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_gank, parent, false));
     }
 
     @Override
@@ -45,7 +47,10 @@ public class GankAdapter extends RecyclerView.Adapter<GankAdapter.GankViewHolder
         holder.card.setTag(resultsBean.getDesc());
         Glide.with(mContext)
                 .load(data.get(position).getUrl())
-//                .centerCrop()
+                .asBitmap()
+                .centerCrop()
+                .thumbnail(0.1f)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.mImageView)
                 .getSize(new SizeReadyCallback() {
                     @Override
@@ -58,12 +63,14 @@ public class GankAdapter extends RecyclerView.Adapter<GankAdapter.GankViewHolder
     }
 
     public static class GankViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
+        RatioImageView mImageView;
         View card;
+
         GankViewHolder(View view) {
             super(view);
             card = view;
             mImageView = view.findViewById(R.id.iv_item_gank);
+            mImageView.setOriginalSize(50, 50);
         }
     }
 }
