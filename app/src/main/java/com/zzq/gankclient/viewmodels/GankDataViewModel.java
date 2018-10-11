@@ -25,7 +25,7 @@ public class GankDataViewModel extends ViewModel {
         PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(false)//配置是否启动PlaceHolders
                 .setInitialLoadSizeHint(15)//初始化加载的数量
-                .setPageSize(10)//配置分页加载的数量
+                .setPageSize(20)//配置分页加载的数量
                 .build();
 
         mPagedListLiveData = (new LivePagedListBuilder(factory, pagedListConfig))

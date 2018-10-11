@@ -15,7 +15,7 @@ public class GankRetrofit {
     GankRetrofit() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(10, TimeUnit.SECONDS);
-        builder.addInterceptor(new TokenIntercepter());
+        builder.addInterceptor(new NetLogIntercepter());
 
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())

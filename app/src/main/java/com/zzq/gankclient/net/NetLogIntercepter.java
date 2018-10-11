@@ -1,10 +1,6 @@
 package com.zzq.gankclient.net;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.google.gson.Gson;
 import com.zzq.gankclient.utils.LogUtils;
 
 import java.io.IOException;
@@ -17,7 +13,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 
-public class TokenIntercepter implements Interceptor {
+public class NetLogIntercepter implements Interceptor {
     @Override
     public Response intercept(final Chain chain) throws IOException {
         Request request = chain.request();
@@ -29,8 +25,8 @@ public class TokenIntercepter implements Interceptor {
         Charset charset = Charset.forName("UTF-8");
 
         String bodyString = buffer.clone().readString(charset);
-        LogUtils.e("gank_net", request.url().url().toString());
-        LogUtils.e("gank_net", bodyString);
+        LogUtils.e("ExerciseClient_net", request.url().url().toString());
+        LogUtils.e("ExerciseClient_net", bodyString);
 
         return response;
     }
