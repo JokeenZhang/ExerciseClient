@@ -65,6 +65,10 @@ public class GankAdapter extends PagedListAdapter<FuliDataBean.ResultsBean, Gank
                         }
                     }
                 });
+
+        if (itemClickListener != null) {
+            itemClickListener.onItemClick(position, getItem(position));
+        }
     }
 
     public static class GankViewHolder extends RecyclerView.ViewHolder {
@@ -77,5 +81,14 @@ public class GankAdapter extends PagedListAdapter<FuliDataBean.ResultsBean, Gank
             mImageView = view.findViewById(R.id.iv_item_gank);
             mImageView.setOriginalSize(50, 50);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, FuliDataBean.ResultsBean bean);
+    }
+
+    private OnItemClickListener itemClickListener;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.itemClickListener = onItemClickListener;
     }
 }

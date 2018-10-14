@@ -10,11 +10,12 @@
     android:background="@drawable/bg_card"
     android:clickable="true">
 
+    <!--android:scaleType="center"-->
     <com.zzq.gankclient.view.widget.RatioImageView
         android:id="@+id/iv_item_gank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
+
         android:adjustViewBounds="true"
         />
 </LinearLayout>
