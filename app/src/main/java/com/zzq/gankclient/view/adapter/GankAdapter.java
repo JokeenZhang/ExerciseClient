@@ -2,6 +2,7 @@ package com.zzq.gankclient.view.adapter;
 
 import android.arch.paging.PagedListAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,16 +13,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.zzq.gankclient.R;
+import com.zzq.gankclient.config.ViewConfig;
 import com.zzq.gankclient.data.FuliDataBean;
+import com.zzq.gankclient.view.activity.ImageActivity;
 import com.zzq.gankclient.view.widget.RatioImageView;
-
-import java.util.List;
 
 public class GankAdapter extends PagedListAdapter<FuliDataBean.ResultsBean, GankAdapter.GankViewHolder> {
 
     private Context mContext;
 
-    public GankAdapter(Context context, List<FuliDataBean.ResultsBean> data) {
+    public GankAdapter(Context context) {
         super(diffCallback);
         mContext = context;
     }
@@ -48,27 +49,7 @@ public class GankAdapter extends PagedListAdapter<FuliDataBean.ResultsBean, Gank
 
     @Override
     public void onBindViewHolder(final GankViewHolder holder, int position) {
-        FuliDataBean.ResultsBean resultsBean = getItem(position);
-        holder.card.setTag(resultsBean.getDesc());
-        Glide.with(mContext)
-                .load(getItem(position).getUrl())
-                .asBitmap()
-                .centerCrop()
-                .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.mImageView)
-                .getSize(new SizeReadyCallback() {
-                    @Override
-                    public void onSizeReady(int width, int height) {
-                        if (!holder.card.isShown()) {
-                            holder.card.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
-
-        if (itemClickListener != null) {
-            itemClickListener.onItemClick(position, getItem(position));
-        }
+        holder.setDataAndListener(getItem(position));
     }
 
     public static class GankViewHolder extends RecyclerView.ViewHolder {
@@ -81,14 +62,31 @@ public class GankAdapter extends PagedListAdapter<FuliDataBean.ResultsBean, Gank
             mImageView = view.findViewById(R.id.iv_item_gank);
             mImageView.setOriginalSize(50, 50);
         }
-    }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position, FuliDataBean.ResultsBean bean);
-    }
-
-    private OnItemClickListener itemClickListener;
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.itemClickListener = onItemClickListener;
+        public void setDataAndListener(final FuliDataBean.ResultsBean resultsBean) {
+            Glide.with(itemView.getContext())
+                    .load(resultsBean.getUrl())
+                    .asBitmap()
+                    .centerCrop()
+                    .thumbnail(0.1f)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mImageView)
+                    .getSize(new SizeReadyCallback() {
+                        @Override
+                        public void onSizeReady(int width, int height) {
+                            if (!card.isShown()) {
+                                card.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(),ImageActivity.class);
+                    intent.putExtra(ViewConfig.showImageAction, resultsBean.getUrl());
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+        }
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomProgressStyle" parent="Base.Widget.AppCompat.ProgressBar">
+        <item name="android:minWidth">28dip</item>
+        <item name="android:maxWidth">28dip</item>
+        <item name="android:minHeight">28dip</item>
+        <item name="android:maxHeight">28dip</item>
+        <item name="android:indeterminateTint">@color/colorPrimary</item>
+        <item name="android:indeterminateTintMode">src_atop</item>
+    </style>
+</resources>

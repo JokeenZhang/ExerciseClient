@@ -14,26 +14,36 @@ import java.util.concurrent.Executors;
 public class GankDataViewModel extends ViewModel {
 
     private LiveData<PagedList<FuliDataBean.ResultsBean>> mPagedListLiveData;
+    private Executor mExecutor;
+    private GankDataSourceFactory mFactory;
+    private PagedList.Config mPagedListConfig;
 
     public GankDataViewModel() {
         init();
     }
 
     private void init() {
-        Executor executor = Executors.newFixedThreadPool(5);
-        GankDataSourceFactory factory = new GankDataSourceFactory();
-        PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
+        mExecutor = Executors.newFixedThreadPool(3);
+        mFactory = new GankDataSourceFactory();
+        mPagedListConfig = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(false)//配置是否启动PlaceHolders
-                .setInitialLoadSizeHint(15)//初始化加载的数量
-                .setPageSize(20)//配置分页加载的数量
+                .setInitialLoadSizeHint(20)//初始化加载的数量
+                .setPageSize(10)//配置分页加载的数量
                 .build();
 
-        mPagedListLiveData = (new LivePagedListBuilder(factory, pagedListConfig))
-                .setFetchExecutor(executor)
+        mPagedListLiveData = (new LivePagedListBuilder(mFactory, mPagedListConfig))
+                .setFetchExecutor(mExecutor)
                 .build();
     }
 
     public LiveData<PagedList<FuliDataBean.ResultsBean>> getGankFuliLiveData() {
+        return mPagedListLiveData;
+    }
+
+    public LiveData<PagedList<FuliDataBean.ResultsBean>> getRefreshLiveData(){
+        mPagedListLiveData = (new LivePagedListBuilder(mFactory, mPagedListConfig))
+                .setFetchExecutor(mExecutor)
+                .build();
         return mPagedListLiveData;
     }
 }
