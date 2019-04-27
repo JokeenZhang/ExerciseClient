@@ -21,13 +21,17 @@ android {
         }
 
         debug {
-            // 不显示Log
+            // 显示Log
             buildConfigField "boolean", "LOG_DEBUG", "true"
         }
     }
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
         // ... and any other excludes go here
+    }
+
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'
     }
 }
 
@@ -36,7 +40,6 @@ greendao {
     daoPackage 'com.zzq.gankclient.db'// 设置DaoMaster、DaoSession、Dao 包名
     targetGenDir 'src/main/java'//设置DaoMaster、DaoSession、Dao目录
 }
-
 
 dependencies {
 

@@ -1,4 +1,4 @@
-package com.zzq.gankclient.model;
+package com.zzq.gankclient.jetpack.datasource;
 
 import android.arch.paging.PageKeyedDataSource;
 import android.support.annotation.NonNull;
@@ -7,11 +7,6 @@ import com.zzq.gankclient.data.FuliDataBean;
 import com.zzq.gankclient.net.GankManager;
 import com.zzq.gankclient.utils.LogUtils;
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

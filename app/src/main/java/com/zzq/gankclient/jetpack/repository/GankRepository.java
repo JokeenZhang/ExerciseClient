@@ -1,8 +1,6 @@
-package com.zzq.gankclient.repository;
+package com.zzq.gankclient.jetpack.repository;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 

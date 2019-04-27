@@ -6,7 +6,7 @@ import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 
 import com.zzq.gankclient.data.FuliDataBean;
-import com.zzq.gankclient.factory.GankDataSourceFactory;
+import com.zzq.gankclient.jetpack.factory.GankDataSourceFactory;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -31,7 +31,7 @@ public class GankDataViewModel extends ViewModel {
                 .setPageSize(10)//配置分页加载的数量
                 .build();
 
-        mPagedListLiveData = (new LivePagedListBuilder(mFactory, mPagedListConfig))
+        mPagedListLiveData = (new LivePagedListBuilder<>(mFactory, mPagedListConfig))
                 .setFetchExecutor(mExecutor)
                 .build();
     }
@@ -41,7 +41,7 @@ public class GankDataViewModel extends ViewModel {
     }
 
     public LiveData<PagedList<FuliDataBean.ResultsBean>> getRefreshLiveData(){
-        mPagedListLiveData = (new LivePagedListBuilder(mFactory, mPagedListConfig))
+        mPagedListLiveData = (new LivePagedListBuilder<>(mFactory, mPagedListConfig))
                 .setFetchExecutor(mExecutor)
                 .build();
         return mPagedListLiveData;

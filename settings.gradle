@@ -1,1 +1,1 @@
-include ':app', ':rxjavastudy', ':loadingview'
+include ':app', ':rxjavastudy'

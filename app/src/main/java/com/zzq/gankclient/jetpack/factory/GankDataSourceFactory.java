@@ -1,18 +1,17 @@
-package com.zzq.gankclient.factory;
+package com.zzq.gankclient.jetpack.factory;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.paging.DataSource;
-import android.arch.paging.PageKeyedDataSource;
 
-import com.zzq.gankclient.model.GankFuliDataSource;
+import com.zzq.gankclient.data.FuliDataBean;
+import com.zzq.gankclient.jetpack.datasource.GankFuliDataSource;
 
 //public class GankDataSourceFactory<T extends PageKeyedDataSource> extends DataSource.Factory {
-public class GankDataSourceFactory extends DataSource.Factory {
+public class GankDataSourceFactory extends DataSource.Factory<Integer, FuliDataBean.ResultsBean> {
 
     private MutableLiveData<GankFuliDataSource> mFuliDataSourceMutableLiveData = new MutableLiveData<>();
-
     @Override
-    public DataSource create() {
+    public DataSource<Integer, FuliDataBean.ResultsBean> create() {
         GankFuliDataSource gankFuliDataSource = new GankFuliDataSource();
         mFuliDataSourceMutableLiveData.postValue(gankFuliDataSource);
         return gankFuliDataSource;
