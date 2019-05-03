@@ -26,9 +26,12 @@ public class GankDataViewModel extends ViewModel {
         mExecutor = Executors.newFixedThreadPool(3);
         mFactory = new GankDataSourceFactory();
         mPagedListConfig = (new PagedList.Config.Builder())
-                .setEnablePlaceholders(false)//配置是否启动PlaceHolders
-                .setInitialLoadSizeHint(20)//初始化加载的数量
-                .setPageSize(10)//配置分页加载的数量
+                //配置是否启动PlaceHolders
+                .setEnablePlaceholders(false)
+                //初始化加载的数量
+                .setInitialLoadSizeHint(20)
+                //配置分页加载的数量
+                .setPageSize(10)
                 .build();
 
         mPagedListLiveData = (new LivePagedListBuilder<>(mFactory, mPagedListConfig))

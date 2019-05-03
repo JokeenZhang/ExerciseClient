@@ -2,10 +2,15 @@ package com.zzq.gankclient.jetpack.datasource;
 
 import android.arch.paging.PageKeyedDataSource;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
+import com.zzq.gankclient.MyApp;
 import com.zzq.gankclient.data.FuliDataBean;
 import com.zzq.gankclient.net.GankManager;
+import com.zzq.gankclient.utils.FileUtils;
 import com.zzq.gankclient.utils.LogUtils;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +39,15 @@ public class GankFuliDataSource extends PageKeyedDataSource<Integer, FuliDataBea
         GankManager.getGankService().getFuliPicData(params.requestedLoadSize, 1).enqueue(new Callback<FuliDataBean>() {
             @Override
             public void onResponse(Call<FuliDataBean> call, Response<FuliDataBean> response) {
-                callback.onResult(response.body().getResults(), null, 2);
+                FuliDataBean body = response.body();
+                List<FuliDataBean.ResultsBean> results = body.getResults();
+                for (FuliDataBean.ResultsBean bean : results) {
+                    if (!TextUtils.isEmpty(bean.getUrl())) {
+                        FileUtils.savePicture(MyApp.getInstance().getApplicationContext(),
+                                "gank", bean.getUrl());
+                    }
+                }
+                callback.onResult(results, null, 2);
             }
 
             @Override
@@ -57,6 +70,20 @@ public class GankFuliDataSource extends PageKeyedDataSource<Integer, FuliDataBea
             @Override
             public void onResponse(Call<FuliDataBean> call, Response<FuliDataBean> response) {
                 //TODO 暂时无法判断如何才是最后一页，如果是最后一页，第二个参数为null
+
+                FuliDataBean body = response.body();
+                List<FuliDataBean.ResultsBean> results = body.getResults();
+                if (results == null || results.size() == 0) {
+                    //可以这么取巧来判断已经没有更多的数据，如果没有更多数据就结束
+                    callback.onResult(response.body().getResults(), null);
+                    return;
+                }
+                for (FuliDataBean.ResultsBean bean : results) {
+                    if (!TextUtils.isEmpty(bean.getUrl())) {
+                        FileUtils.savePicture(MyApp.getInstance().getApplicationContext(),
+                                "gank", bean.getUrl());
+                    }
+                }
                 callback.onResult(response.body().getResults(), params.key + 1);
             }
 

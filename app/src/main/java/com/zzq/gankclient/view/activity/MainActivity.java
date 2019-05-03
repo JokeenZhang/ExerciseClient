@@ -13,6 +13,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import com.zzq.gankclient.R;
 import com.zzq.gankclient.data.FuliDataBean;
 import com.zzq.gankclient.jetpack.repository.GankRepository;
+import com.zzq.gankclient.utils.LogUtils;
 import com.zzq.gankclient.view.adapter.GankAdapter;
 import com.zzq.gankclient.viewmodels.GankDataViewModel;
 
