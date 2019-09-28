@@ -1,11 +1,14 @@
 package com.zzq.gankclient.jetpack.datasource;
 
-import androidx.paging.PageKeyedDataSource;
-import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.paging.PageKeyedDataSource;
+
 import com.zzq.gankclient.MyApp;
+import com.zzq.gankclient.base.ExerciseCallback;
 import com.zzq.gankclient.data.FuliDataBean;
+import com.zzq.gankclient.jetpack.repository.GankRepository;
 import com.zzq.gankclient.net.GankManager;
 import com.zzq.gankclient.utils.FileUtils;
 import com.zzq.gankclient.utils.LogUtils;
@@ -13,10 +16,14 @@ import com.zzq.gankclient.utils.LogUtils;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GankFuliDataSource extends PageKeyedDataSource<Integer, FuliDataBean.ResultsBean> {
+
+    private GankRepository mGankRepository;
+    public GankFuliDataSource(GankRepository repository) {
+        mGankRepository = repository;
+    }
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull final LoadInitialCallback<Integer, FuliDataBean.ResultsBean> callback) {
 
@@ -36,9 +43,11 @@ public class GankFuliDataSource extends PageKeyedDataSource<Integer, FuliDataBea
                     }
                 });*/
         LogUtils.e(this, "loadInitial ");
-        GankManager.getGankService().getFuliPicData(params.requestedLoadSize, 1).enqueue(new Callback<FuliDataBean>() {
+        Call<FuliDataBean> fuliPicData = GankManager.getGankService().getFuliPicData(params.requestedLoadSize, 1);
+        GankManager.getGankService().getFuliPicData(params.requestedLoadSize, 1)
+                .enqueue(new ExerciseCallback<FuliDataBean>(mGankRepository.getErrorLiveData()) {
             @Override
-            public void onResponse(Call<FuliDataBean> call, Response<FuliDataBean> response) {
+            public void onSuccess(Call<FuliDataBean> call, Response<FuliDataBean> response) {
                 FuliDataBean body = response.body();
                 List<FuliDataBean.ResultsBean> results = body.getResults();
                 for (FuliDataBean.ResultsBean bean : results) {
@@ -49,26 +58,26 @@ public class GankFuliDataSource extends PageKeyedDataSource<Integer, FuliDataBea
                 }
                 callback.onResult(results, null, 2);
             }
-
-            @Override
-            public void onFailure(Call<FuliDataBean> call, Throwable t) {
-                t.printStackTrace();
-            }
         });
-    }
 
-    @Override
-    public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, FuliDataBean.ResultsBean> callback) {
 
     }
 
     @Override
-    public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer, FuliDataBean.ResultsBean> callback) {
+    public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer,
+            FuliDataBean.ResultsBean> callback) {
+
+    }
+
+    @Override
+    public void loadAfter(@NonNull final LoadParams<Integer> params, @NonNull final LoadCallback<Integer,
+            FuliDataBean.ResultsBean> callback) {
         LogUtils.e(this, "loadAfter key = " + params.key);
         //不想用RxJava了
-        GankManager.getGankService().getFuliPicData(params.requestedLoadSize, params.key).enqueue(new Callback<FuliDataBean>() {
+        GankManager.getGankService().getFuliPicData(params.requestedLoadSize, params.key)
+                .enqueue(new ExerciseCallback<FuliDataBean>(mGankRepository.getErrorLiveData()) {
             @Override
-            public void onResponse(Call<FuliDataBean> call, Response<FuliDataBean> response) {
+            public void onSuccess(Call<FuliDataBean> call, Response<FuliDataBean> response) {
                 //TODO 暂时无法判断如何才是最后一页，如果是最后一页，第二个参数为null
 
                 FuliDataBean body = response.body();
@@ -85,11 +94,6 @@ public class GankFuliDataSource extends PageKeyedDataSource<Integer, FuliDataBea
                     }
                 }
                 callback.onResult(response.body().getResults(), params.key + 1);
-            }
-
-            @Override
-            public void onFailure(Call<FuliDataBean> call, Throwable t) {
-                t.printStackTrace();
             }
         });
 

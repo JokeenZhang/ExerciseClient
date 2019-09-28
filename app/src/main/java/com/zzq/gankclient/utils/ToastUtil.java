@@ -1,6 +1,7 @@
 package com.zzq.gankclient.utils;
 
 import android.content.Context;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.zzq.gankclient.MyApp;
@@ -9,14 +10,21 @@ public class ToastUtil {
 
 
     private static Toast sToast;
+    private static Handler sHandler = MyApp.getInstance().getHandler();
 
     public static void showToast(String msg) {
-        if (sToast == null) {
+        if (null == sToast) {
             sToast = Toast.makeText(MyApp.getInstance(), msg, Toast.LENGTH_SHORT);
-        }else {
+        } else {
             sToast.setText(msg);
         }
-        sToast.show();
+        sToast.cancel();
+        sHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sToast.show();
+            }
+        }, 200);
     }
 
     /**

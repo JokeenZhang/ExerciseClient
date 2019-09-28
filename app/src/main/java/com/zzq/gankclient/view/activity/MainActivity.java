@@ -1,22 +1,23 @@
 package com.zzq.gankclient.view.activity;
 
-import androidx.lifecycle.Observer;
-import androidx.paging.PagedList;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.zzq.gankclient.R;
+import com.zzq.gankclient.base.BaseActivity;
 import com.zzq.gankclient.data.FuliDataBean;
-import com.zzq.gankclient.jetpack.repository.GankRepository;
+import com.zzq.gankclient.jetpack.viewmodels.GankDataViewModel;
 import com.zzq.gankclient.view.adapter.GankAdapter;
-import com.zzq.gankclient.viewmodels.GankDataViewModel;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class MainActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     private RecyclerView mRecyclerView;
     private GankAdapter mAdapter;
@@ -45,10 +46,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         }, 1000);
 
+        mGankFuliDataViewModel = initBaseViewModel(GankDataViewModel.class);
     }
 
     private void loadData() {
-        mGankFuliDataViewModel = GankRepository.getGankFuliDataViewModel(this);
+        mGankFuliDataViewModel = ViewModelProviders.of(this).get(GankDataViewModel.class);
+
         mGankFuliDataViewModel.getGankFuliLiveData().observe(this, new Observer<PagedList<FuliDataBean.ResultsBean>>() {
             @Override
             public void onChanged(@Nullable PagedList<FuliDataBean.ResultsBean> resultsBeans) {
