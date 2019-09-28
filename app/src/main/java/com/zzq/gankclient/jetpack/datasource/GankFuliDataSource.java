@@ -1,7 +1,7 @@
 package com.zzq.gankclient.jetpack.datasource;
 
-import android.arch.paging.PageKeyedDataSource;
-import android.support.annotation.NonNull;
+import androidx.paging.PageKeyedDataSource;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.zzq.gankclient.MyApp;

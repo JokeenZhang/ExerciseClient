@@ -170,5 +170,39 @@ public class FuliDataBean {
                 return new ResultsBean[size];
             }
         };
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ResultsBean that = (ResultsBean) o;
+
+            if (used != that.used) return false;
+            if (_id != null ? !_id.equals(that._id) : that._id != null) return false;
+            if (createdAt != null ? !createdAt.equals(that.createdAt) : that.createdAt != null)
+                return false;
+            if (desc != null ? !desc.equals(that.desc) : that.desc != null) return false;
+            if (publishedAt != null ? !publishedAt.equals(that.publishedAt) : that.publishedAt != null)
+                return false;
+            if (source != null ? !source.equals(that.source) : that.source != null) return false;
+            if (type != null ? !type.equals(that.type) : that.type != null) return false;
+            if (url != null ? !url.equals(that.url) : that.url != null) return false;
+            return who != null ? who.equals(that.who) : that.who == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = _id != null ? _id.hashCode() : 0;
+            result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+            result = 31 * result + (desc != null ? desc.hashCode() : 0);
+            result = 31 * result + (publishedAt != null ? publishedAt.hashCode() : 0);
+            result = 31 * result + (source != null ? source.hashCode() : 0);
+            result = 31 * result + (type != null ? type.hashCode() : 0);
+            result = 31 * result + (url != null ? url.hashCode() : 0);
+            result = 31 * result + (used ? 1 : 0);
+            result = 31 * result + (who != null ? who.hashCode() : 0);
+            return result;
+        }
     }
 }

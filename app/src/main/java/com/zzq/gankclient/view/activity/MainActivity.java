@@ -1,19 +1,18 @@
 package com.zzq.gankclient.view.activity;
 
-import android.arch.lifecycle.Observer;
-import android.arch.paging.PagedList;
+import androidx.lifecycle.Observer;
+import androidx.paging.PagedList;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.zzq.gankclient.R;
 import com.zzq.gankclient.data.FuliDataBean;
 import com.zzq.gankclient.jetpack.repository.GankRepository;
-import com.zzq.gankclient.utils.LogUtils;
 import com.zzq.gankclient.view.adapter.GankAdapter;
 import com.zzq.gankclient.viewmodels.GankDataViewModel;
 

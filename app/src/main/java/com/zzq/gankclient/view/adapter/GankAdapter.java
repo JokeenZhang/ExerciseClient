@@ -1,10 +1,10 @@
 package com.zzq.gankclient.view.adapter;
 
-import android.arch.paging.PagedListAdapter;
+import androidx.paging.PagedListAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +66,6 @@ public class GankAdapter extends PagedListAdapter<FuliDataBean.ResultsBean, Gank
         public void setDataAndListener(final FuliDataBean.ResultsBean resultsBean) {
             Glide.with(itemView.getContext())
                     .load(resultsBean.getUrl())
-                    .asBitmap()
                     .centerCrop()
                     .thumbnail(0.1f)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
